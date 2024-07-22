@@ -10,7 +10,7 @@ const StyledInput = styled.input`
   border-radius: 5px;
   font-size: 16px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  height: ${({ fullHeight }) => fullHeight || 'auto'};
+  height: ${({ $fullHeight }) => $fullHeight || 'auto'};
 
   &:focus {
     border-color: blue;
@@ -22,14 +22,15 @@ const StyledInput = styled.input`
     border-color: blue;
   }
 
-  &:disabled {
+  &:disabled,
+  &[readonly] {
     background-color: #f0f0f0;
     border-color: #ddd;
     cursor: not-allowed;
   }
 `;
 
-const InputField = ({ label, name, type = 'text', className, fullHeight }) => {
+const InputField = ({ label, name, type = 'text', className, fullHeight, readOnly = false }) => {
     const { touched, errors } = useFormikContext();
 
     return (
@@ -44,9 +45,10 @@ const InputField = ({ label, name, type = 'text', className, fullHeight }) => {
                                 id={name}
                                 type={type}
                                 {...field}
-                                fullHeight={fullHeight}
+                                $fullHeight={fullHeight}
+                                readOnly={readOnly}
                             />
-                            {field.name === 'ProductDescription' && (
+                            {field.name === 'description' && (
                                 <span style={{ color: 'grey', fontSize: "12px" }}>
                                     Відображується у картці товару
                                 </span>

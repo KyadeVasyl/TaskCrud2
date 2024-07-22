@@ -1,4 +1,4 @@
-// Grid component
+
 import styled from "styled-components";
 
 const StyledGrid = styled.div`
@@ -14,3 +14,6 @@ const Grid = ({ columns, rows, gap, ...rest }) => {
 };
 
 export default Grid;
+
+
+

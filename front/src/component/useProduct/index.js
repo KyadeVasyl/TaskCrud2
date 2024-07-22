@@ -1,53 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-
 const getData = async () => {
-
-
     const response = await fetch('http://localhost:4000/product-list', {
-
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         }
-    })
-
+    });
     if (!response.ok) {
-        throw new Error('Network response was not ok');
-
+        const errorData = await response.json()
+        throw new Error(errorData || 'Упс щось запит провалився');
     }
-
     return response.json();
 }
 
-
 export function useProducts() {
-
-
     const { data, isLoading, isSuccess, isError } = useQuery({
         queryKey: ['products'],
         queryFn: getData,
 
+    }
 
-    })
-
-
+    );
 
     useEffect(() => {
         if (isSuccess) {
-            console.log('Data fethced successfully', data)
+            console.log('Дані отримано успішно', data);
+        } else if (isError) {
+            console.log('Помилка при отриманні даних');
+        } else if (isLoading) {
+
+            console.log('Дані завантажуються');
+
         }
-    }, [isSuccess, data])
+    }, [isSuccess, isError, isLoading, data]);
 
 
-    useEffect(() => {
-        if (isError) {
-            console.log('Error fetching data')
-        }
-    }, [isError])
-
-
-    return { data, isError, isLoading, isSuccess }
+    return { data, isError, isLoading, isSuccess };
 }
-

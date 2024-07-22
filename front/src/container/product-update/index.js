@@ -1,174 +1,172 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import Title from "../../component/title";
-import "./index.css";
 import Box from "../../component/box";
 import Flex from "../../component/flex";
 import FormBasic from "../../component/form";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import { error } from "console";
-
-
-
 
 const fields = [
-    { name: "ProductName", label: "Назва товару", type: 'text' },
-    { name: "ProductPrice", label: "Ціна", type: 'number' },
-    { name: "ProductId", label: "ID", type: 'number' },
-    { name: "ProductDescription", label: "Опис товару", type: 'text' },
+    { name: "name", label: "Назва товару", type: 'text' },
+    { name: "price", label: "Ціна", type: 'number' },
+    { name: "id", label: "ID", type: 'number' },
+    { name: "description", label: "Опис товару", type: 'text' },
 ];
 
-
 export default function ProductUpdate({ title }) {
+
+    const queryClient = useQueryClient();
     const { id } = useParams();
+
     const navigate = useNavigate();
+
+
+
     const [initialValues, setInitialValues] = useState({
-        ProductName: '',
-        ProductPrice: '',
-        ProductDescription: '',
-        ProductId: '',
+        name: '',
+        price: '',
+        description: '',
+        id: '',
     });
+
     const [product, setProduct] = useState(null);
 
-
-    const { data, isSuccess } = useQuery({
+    const { data, isLoading, isError, error } = useQuery({
 
         queryKey: ['product', id],
         queryFn: async () => {
             const response = await fetch(`http://localhost:4000/product-update/${id}`);
-
-
-
-            if (!response.ok) { throw new Error("Network response was not ok") }
-
+            if (!response.ok) {
+                if (response.status === 404) {
+                    return null;
+                }
+                const errorData = await response.json()
+                throw new Error(errorData || 'Упс щось запит провалився');
+            }
             return response.json();
         },
         onSuccess: (data) => {
-            setInitialValues({
-                ProductName: data.name,
-                ProductPrice: data.price,
-                ProductDescription: data.description,
-                ProductId: data.id,
-            })
+            if (data) {
+                setInitialValues({
+                    name: data.name,
+                    price: data.price,
+                    description: data.description,
+                    id: data.id,
+                });
+                setProduct(data);
+            } else {
+
+                navigate('/product-list');
+            }
         }
-
-    })
-
-
+    });
 
 
 
     useEffect(() => {
-        if (isSuccess) {
+        if (data) {
             setInitialValues({
-                ProductName: data.name,
-                ProductPrice: data.price,
-                ProductDescription: data.description,
-                ProductId: data.id,
+                name: data.name,
+                price: data.price,
+                description: data.description,
+                id: data.id,
             });
             setProduct(data);
-
         }
-    }, [isSuccess, data]);
-
+    }, [data]);
 
     const updProductMutation = useMutation({
-
-        mutationKey: ["upd-product"],
         mutationFn: async (product) => {
-            const response = await fetch(`http://localhost:4000/product-update/${product.ProductId}`, {
-
+            const response = await fetch(`http://localhost:4000/product-update/${product.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(product),
-
-            })
+            });
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json()
+                throw new Error(errorData || 'Упс щось запит провалився');
             }
-            if (response.ok) {
-                console.log('Network response was OK');
-                console.log(response)
-            }
-            return response.json()
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['products']);
+            queryClient.invalidateQueries(['product', id]);
+            navigate('/product-list');
+        },
+        onError: (error) => {
+            navigate('/alert', {
+                state: {
+                    status: "error",
+                    message: error.message
+                }
+            });
         }
-    })
+    });
 
     const deleteProductMutation = useMutation({
-        mutationKey: ['delete-product'],
         mutationFn: async (productId) => {
             const response = await fetch(`http://localhost:4000/product-update/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-
-            })
-
+            });
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json()
+                throw new Error(errorData || 'Упс щось запит провалився');
             }
-            if (response.ok) {
-                console.log('Network response was OK');
-                console.log(response)
-            }
-            return response.json()
-
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['products']);
+            navigate('/product-list');
+        },
+        onError: (error) => {
+            navigate('/alert', {
+                state: {
+                    status: "error",
+                    message: error.message
+                }
+            });
         }
-    })
+    });
 
 
-    const handleUpdate = (updProduct, { resetForm }) => {
-        updProductMutation(updProduct, {
+
+    const handleUpdate = (product, { resetForm }) => {
+        console.log('Оновлення продукту з айді:', product.id);
+
+        updProductMutation.mutate(product, {
+
             onSuccess: () => {
-                resetForm();
-                navigate('/alert', {
-                    state: {
-                        status: "success",
-                        message: 'Товар успішно створено'
-                    }
-                })
-            },
-            onError: (error) => {
-                navigate('/alert', {
-                    state: {
-                        status: "error",
-                        message: error.message
-                    }
-                })
+                console.log('Продукт успішно оновлено');
 
-            }
+                resetForm();
+            },
         });
     };
 
-
-    const handleDelete = () => {
+    const handleDelete = (product, { resetForm }) => {
+        console.log('Видалення продукту з айді:', product.id);
         deleteProductMutation.mutate(id, {
             onSuccess: () => {
+                console.log('Продукт успішно видалено');
 
-                navigate('/alert', {
-                    state: {
-                        status: "success",
-                        message: 'Товар успішно видалено'
-                    }
-                })
+                queryClient.removeQueries(['product', id]);
+                queryClient.invalidateQueries(['products']);
+
+                resetForm();
+
             },
-            onError: () => {
-                navigate('/alert', {
-                    state: {
-                        status: "error",
-                        message: error.message
-                    }
-                })
-            }
-        })
-    }
+        });
+    };
 
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error: {error.message}</div>;
 
-
-    if (!product) return <div>Loading...</div>;
+    if (!product) return <div>No product found</div>;
 
     return (
         <Flex $direction="column" $gap="36px">
@@ -192,7 +190,6 @@ export default function ProductUpdate({ title }) {
                             rows: "auto auto",
                         }}
                         fullWidthIndices={[3]}
-
                     />
                 </Flex>
             </Box>

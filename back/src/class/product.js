@@ -30,37 +30,25 @@ class Product {
 
     static updById = (id, data) => {
         const product = this.getById(id);
-        const { name, price, description } = data;
-
         if (product) {
-            if (name) {
-                product.name = name;
-            } else if (price) {
-                product.price = price
-            } else if (description) {
-                product.description = description
-            }
-
+            if (data.name) product.name = data.name;
+            if (data.price) product.price = data.price;
+            if (data.description) product.description = data.description;
             return true;
         } else {
             return false;
         }
-
-
-
-
     }
 
-
     static deleteById = (id) => {
-        const index = this.#list.findIndex((product) => product.id === id)
+        const index = this.#list.findIndex((product) => product.id === id);
 
         if (index !== -1) {
-
             this.#list.splice(index, 1);
             return true;
-        } else return false;
-
+        } else {
+            return false;
+        }
     }
 
 }

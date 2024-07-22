@@ -10,28 +10,19 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProductList() {
     const navigate = useNavigate();
-
-
     const { data, isError, isLoading, isSuccess } = useProducts();
 
     if (isLoading) {
-
         return <div>Loading...</div>
     }
 
     if (isError) {
-
         return <div>Error loading products...</div>
     }
 
-
     const handleEdit = (id) => {
-
         navigate(`/product-update/${id}`);
     }
-
-
-
 
     if (isSuccess && data) {
         return (
@@ -59,5 +50,4 @@ export default function ProductList() {
     }
 
     return <div>Товарів нема</div>;
-
 }

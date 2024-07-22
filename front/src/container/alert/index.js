@@ -45,7 +45,7 @@ export default function Alert() {
         <Box style={{ padding: "20px" }}>
             <Flex $gap="50px" $justify="center" $align="center">
                 <Flex $gap="16px" $direction="column" >
-                    <Title>{status === 'success' ? 'Успішне виконання дії' : 'Упс, щось пішло не так ):'}</Title>
+                    <Title>{state.message}</Title>
                     <Description $color="grey">{message}</Description>
                 </Flex>
 

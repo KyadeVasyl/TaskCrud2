@@ -12,16 +12,21 @@ const FormContainer = styled(Form)`
 gap: 12px;
 `;
 
-export default function FormBasic({ handleUpdate, handleDelete, initialValues, onSubmit, fields, updBtn, deleteBtn, createBtn, gridConfig, fullWidthIndices = [] }) {
+export default function FormBasic({ initialValues, handleCreate, handleUpdate, handleDelete, fields, updBtn, deleteBtn, createBtn, gridConfig, fullWidthIndices = [] }) {
     const validationSchema = createValidationSchema(fields);
+    const handleSubmit = (values, actions) => {
+        if (handleCreate) {
+            handleCreate(values, actions)
+        } else if (handleUpdate) {
+            handleUpdate(values, actions)
 
+        }
+    }
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values, actions) => {
-                onSubmit(values, actions)
-            }}
+            onSubmit={handleSubmit}
         >
             {() => (
                 <FormContainer>
@@ -38,6 +43,7 @@ export default function FormBasic({ handleUpdate, handleDelete, initialValues, o
                                     label={field.label}
                                     name={field.name}
                                     type={field.type}
+                                    readOnly={field.name === 'id'}
 
                                 />
                             </div>
@@ -45,12 +51,12 @@ export default function FormBasic({ handleUpdate, handleDelete, initialValues, o
                     </Grid>
                     <Flex $align="center" $justify="space-between">
                         {updBtn && (
-                            <Button onClick={handleUpdate} style={{ width: 'max-content' }} type="submit" $background="blue">
+                            <Button style={{ width: 'max-content' }} type="submit" $background="blue">
                                 Зберегти зміни
                             </Button>
                         )}
                         {deleteBtn && (
-                            <Button onClick={handleDelete} style={{ width: 'max-content' }} type="submit" $background="red">
+                            <Button onClick={() => handleDelete(initialValues, { resetForm: () => { } })} style={{ width: 'max-content' }} type="button" $background="red">
                                 Видалити товар
                             </Button>
                         )}

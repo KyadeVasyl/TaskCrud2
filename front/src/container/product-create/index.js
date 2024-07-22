@@ -9,18 +9,16 @@ import { useNavigate } from "react-router-dom";
 
 
 const initialValues = {
-    ProductName: '',
-    ProductPrice: '',
-    ProductDescription: '',
+    name: '',
+    price: '',
+    description: '',
 };
 
 const fields = [
-    { name: "ProductName", label: "Назва товару", type: 'text' },
-    { name: "ProductPrice", label: "Ціна", type: 'number' },
-    { name: "ProductDescription", label: "Опис товару", type: 'text' },
+    { name: "name", label: "Назва товару", type: 'text' },
+    { name: "price", label: "Ціна", type: 'number' },
+    { name: "description", label: "Опис товару", type: 'text' },
 ];
-
-
 
 
 
@@ -29,8 +27,10 @@ export default function ProductCreate({ title }) {
 
     const { mutate } = useMutation({
 
-        mutationKey: ["add product"],
+        mutationKey: ["add-product"],
         mutationFn: async (newProduct) => {
+            console.log("Відправка даних нового товару:", newProduct);
+
             const response = await fetch('http://localhost:4000/product-create', {
 
                 method: 'POST',
@@ -41,18 +41,16 @@ export default function ProductCreate({ title }) {
 
             })
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json()
+                throw new Error(errorData || 'Упс щось запит провалився');
             }
-            if (response.ok) {
-                console.log('Network response was OK');
-                console.log(response)
-            }
+
             return response.json()
         }
     })
 
 
-    const handleSubmit = (newProduct, { resetForm }) => {
+    const handleCreate = (newProduct, { resetForm }) => {
         mutate(newProduct, {
             onSuccess: () => {
                 resetForm();
@@ -86,7 +84,7 @@ export default function ProductCreate({ title }) {
                         Інформація про товар
                     </Title>
                     <FormBasic
-                        onSubmit={handleSubmit}
+                        handleCreate={handleCreate}
                         fields={fields}
                         initialValues={initialValues}
                         createBtn={true}
