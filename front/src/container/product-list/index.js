@@ -7,8 +7,10 @@ import Button from "../../component/button";
 import { useProducts } from "../../component/useProduct";
 import Grid from "../../component/grid";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ProductList() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { data, isError, isLoading, isSuccess } = useProducts();
 
@@ -28,7 +30,7 @@ export default function ProductList() {
         return (
             <Flex gap={"36px"} direction={"column"}>
                 <Title weight="600" color="blue" size="36px">
-                    Список товарів
+                    {t("ProductListTitle")}
                 </Title>
                 <Grid rows={"auto auto"} columns={"1fr 1fr 1fr"} $gap="36px">
                     {data.map((product) => (
@@ -39,7 +41,7 @@ export default function ProductList() {
                                 <span style={{ color: 'grey', fontSize: '14px' }}>ID: {product.id}</span>
                                 <Flex gap={"12px"} align="center" justify="space-between">
                                     <span style={{ color: 'black', fontSize: '18px', fontWeight: 'bold' }}>{product.price}$</span>
-                                    <Button onClick={() => handleEdit(product.id)} style={{ width: 'auto' }} size="16px" weight="500" $linkLike>Редагувати</Button>
+                                    <Button onClick={() => handleEdit(product.id)} style={{ width: 'auto' }} size="16px" weight="500" $linkLike>{t("LinkChange")}</Button>
                                 </Flex>
                             </Flex>
                         </Box>

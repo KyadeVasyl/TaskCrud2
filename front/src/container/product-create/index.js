@@ -6,6 +6,7 @@ import FormBasic from "../../component/form";
 import { useMutation } from '@tanstack/react-query';
 
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 
 const initialValues = {
@@ -14,16 +15,24 @@ const initialValues = {
     description: '',
 };
 
-const fields = [
-    { name: "name", label: "Назва товару", type: 'text' },
-    { name: "price", label: "Ціна", type: 'number' },
-    { name: "description", label: "Опис товару", type: 'text' },
-];
 
 
-
-export default function ProductCreate({ title }) {
+export default function ProductCreate() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
+    const validationMessages = {
+        required: t("RequiredField"),
+        minText: t("NotEnoughText"),
+        maxText: t("TooMuchText"),
+        positiveNumber: t("PositiveNumber"),
+    };
+
+    const fields = [
+        { name: "name", label: t("ProductName"), type: 'text' },
+        { name: "price", label: t("ProductPrice"), type: 'number' },
+        { name: "description", label: t("ProductDescription"), type: 'text' },
+    ];
 
     const { mutate } = useMutation({
 
@@ -57,7 +66,7 @@ export default function ProductCreate({ title }) {
                 navigate('/alert', {
                     state: {
                         status: "success",
-                        message: 'Товар успішно створено'
+                        message: t("CreatedSuccess")
                     }
                 })
             },
@@ -76,12 +85,12 @@ export default function ProductCreate({ title }) {
     return (
         <Grid $gap="36px">
             <Title $weight="600" $color="blue" $size="36px">
-                {title}
+                {t("ProductCreateTitle")}
             </Title>
             <Box>
                 <Grid $gap="26px">
                     <Title $weight="normal" $size="24px">
-                        Інформація про товар
+                        {t("ProductInfoTitle")}
                     </Title>
                     <FormBasic
                         handleCreate={handleCreate}
@@ -93,6 +102,7 @@ export default function ProductCreate({ title }) {
                             rows: 'auto auto',
                         }}
                         fullWidthIndices={[2]}
+                        validationMessages={validationMessages}
                     />
                 </Grid>
             </Box>

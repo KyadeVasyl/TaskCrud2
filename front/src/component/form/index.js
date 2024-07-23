@@ -5,6 +5,7 @@ import { createValidationSchema } from "../validation";
 import Grid from "../grid";
 import Flex from "../flex";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 const FormContainer = styled(Form)`
  display: flex;
@@ -12,8 +13,11 @@ const FormContainer = styled(Form)`
 gap: 12px;
 `;
 
-export default function FormBasic({ initialValues, handleCreate, handleUpdate, handleDelete, fields, updBtn, deleteBtn, createBtn, gridConfig, fullWidthIndices = [] }) {
-    const validationSchema = createValidationSchema(fields);
+export default function FormBasic({ validationMessages, initialValues, handleCreate, handleUpdate, handleDelete, fields, updBtn, deleteBtn, createBtn, gridConfig, fullWidthIndices = [] }) {
+
+    const { t } = useTranslation();
+
+    const validationSchema = createValidationSchema(fields, validationMessages);
     const handleSubmit = (values, actions) => {
         if (handleCreate) {
             handleCreate(values, actions)
@@ -52,18 +56,18 @@ export default function FormBasic({ initialValues, handleCreate, handleUpdate, h
                     <Flex $align="center" $justify="space-between">
                         {updBtn && (
                             <Button style={{ width: 'max-content' }} type="submit" $background="blue">
-                                Зберегти зміни
+                                {t("buttonUpdate")}
                             </Button>
                         )}
                         {deleteBtn && (
                             <Button onClick={() => handleDelete(initialValues, { resetForm: () => { } })} style={{ width: 'max-content' }} type="button" $background="red">
-                                Видалити товар
+                                {t("buttonDelete")}
                             </Button>
                         )}
                     </Flex>
                     {createBtn && (
                         <Button $background="blue" type="submit">
-                            Створити товар
+                            {t("buttonCreate")}
                         </Button>
                     )}
                 </FormContainer>

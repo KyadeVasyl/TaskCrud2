@@ -5,6 +5,7 @@ import Title from "../../component/title";
 import Description from "../../component/description";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -12,10 +13,10 @@ export default function Alert() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
 
 
     const queryParams = new URLSearchParams(location.search)
-    const status = queryParams.get('status')
     const message = queryParams.get('message')
 
 
@@ -50,7 +51,7 @@ export default function Alert() {
                 </Flex>
 
                 <Flex style={{ gap: "none" }}>
-                    <Button onClick={handleBack} $background="blue">Повернутися назад</Button>
+                    <Button onClick={handleBack} $background="blue">{t("BackButton")}</Button>
 
                 </Flex>
 

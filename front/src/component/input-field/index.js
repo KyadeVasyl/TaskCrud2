@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Field, useFormikContext } from 'formik';
 import Grid from "../grid";
+import { useTranslation } from "react-i18next";
 
 const StyledInput = styled.input`
   width: 100%;
@@ -32,6 +33,7 @@ const StyledInput = styled.input`
 
 const InputField = ({ label, name, type = 'text', className, fullHeight, readOnly = false }) => {
     const { touched, errors } = useFormikContext();
+    const { t } = useTranslation();
 
     return (
         <div>
@@ -50,7 +52,7 @@ const InputField = ({ label, name, type = 'text', className, fullHeight, readOnl
                             />
                             {field.name === 'description' && (
                                 <span style={{ color: 'grey', fontSize: "12px" }}>
-                                    Відображується у картці товару
+                                    {t("Description")}
                                 </span>
                             )}
                         </>

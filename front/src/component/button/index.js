@@ -11,9 +11,9 @@ width: 100%;
     color: ${({ $fontColor }) => $fontColor || "white"};
     cursor: pointer;
     font-size:  ${({ $size }) => $size || "12px"};
-    padding: 12px 24px;
+    padding: ${({ $padding }) => $padding || "12px 24px"}; 
     transition: opacity 0.3s ease;
-    
+      margin: ${({ $margin }) => $margin || "unset"}; 
     &:hover {
         opacity: 0.7;
     }
@@ -46,8 +46,8 @@ width: 100%;
 `
 
 
-const Button = ({ weight, color, LinkLike, size, fontColor, background, ...rest }) => {
-    return <StyledButton {...WithDollarPrefix({ weight, color, LinkLike, size, fontColor, background })} {...rest} />
+const Button = ({ margin, padding, weight, color, LinkLike, size, fontColor, background, ...rest }) => {
+    return <StyledButton {...WithDollarPrefix({ margin, padding, weight, color, LinkLike, size, fontColor, background })} {...rest} />
 }
 
 export default Button;

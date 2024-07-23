@@ -8,14 +8,16 @@ flex-direction: ${({ $direction }) => $direction || "unset"};
 justify-content: ${({ $justify }) => $justify || "unset"};
 align-items: ${({ $align }) => $align || "unset"};
 gap: ${({ $gap }) => $gap || "unset"};
+margin: ${({ $margin }) => $margin || "unset"};
+
 
 
 `
 
 
-const Flex = ({ direction, justify, align, gap, ...rest }) => {
+const Flex = ({ margin, direction, justify, align, gap, ...rest }) => {
 
-    return <StyledFlex {...WithDollarPrefix({ direction, justify, align, gap })} {...rest} />
+    return <StyledFlex {...WithDollarPrefix({ margin, direction, justify, align, gap })} {...rest} />
 }
 
 

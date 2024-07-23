@@ -1,0 +1,32 @@
+{
+
+"buttonCreate": "create product",
+"buttonDelete": "delete product",
+"buttonUpdate": "update product",
+
+"Description": "Displayed in the product card",
+
+
+"ProductCreateTitle": "Creating product",
+"ProductUpdateTitle": "Updating product",
+"ProductListTitle": "Product List",
+
+"En": "En",
+"Uk": "Uk",
+
+"ProductInfoTitle": "About product",
+
+"ProductName": "Product name",
+"ProductPrice": "price",
+"ProductDescription": "Description",
+"CreatedSuccess": "Product created successfully",
+"BackButton": "Back",
+"LinkChange": "Change",
+
+"RequiredField": "Required",
+"NotEnoughText": "Type more text",
+"TooMuchText": "Too much text",
+"PositiveNumber": "Type correct number"
+
+
+}

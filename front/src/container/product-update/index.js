@@ -5,22 +5,29 @@ import Title from "../../component/title";
 import Box from "../../component/box";
 import Flex from "../../component/flex";
 import FormBasic from "../../component/form";
+import { useTranslation } from "react-i18next";
 
-const fields = [
-    { name: "name", label: "Назва товару", type: 'text' },
-    { name: "price", label: "Ціна", type: 'number' },
-    { name: "id", label: "ID", type: 'number' },
-    { name: "description", label: "Опис товару", type: 'text' },
-];
 
-export default function ProductUpdate({ title }) {
+export default function ProductUpdate() {
+    const { t } = useTranslation();
 
     const queryClient = useQueryClient();
     const { id } = useParams();
 
     const navigate = useNavigate();
+    const validationMessages = {
+        required: t("RequiredField"),
+        minText: t("NotEnoughText"),
+        maxText: t("TooMuchText"),
+        positiveNumber: t("PositiveNumber"),
+    };
 
-
+    const fields = [
+        { name: "name", label: t("ProductName"), type: 'text' },
+        { name: "price", label: t("ProductPrice"), type: 'number' },
+        { name: "id", label: "ID", type: 'number' },
+        { name: "description", label: t("ProductDescription"), type: 'text' },
+    ];
 
     const [initialValues, setInitialValues] = useState({
         name: '',
@@ -171,12 +178,12 @@ export default function ProductUpdate({ title }) {
     return (
         <Flex $direction="column" $gap="36px">
             <Title $weight="600" $color="blue" $size={"36px"}>
-                {title}
+                {t('ProductUpdateTitle')}
             </Title>
             <Box>
                 <Flex $direction="column" $gap="26px">
                     <Title $weight="normal" $size="24px">
-                        Інформація про товар
+                        {t('ProductInfoTitle')}
                     </Title>
                     <FormBasic
                         handleDelete={handleDelete}
@@ -190,6 +197,7 @@ export default function ProductUpdate({ title }) {
                             rows: "auto auto",
                         }}
                         fullWidthIndices={[3]}
+                        validationMessages={validationMessages}
                     />
                 </Flex>
             </Box>

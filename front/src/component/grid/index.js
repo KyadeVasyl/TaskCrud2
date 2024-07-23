@@ -9,8 +9,8 @@ const StyledGrid = styled.div`
   width: 100%;
 `;
 
-const Grid = ({ columns, rows, gap, ...rest }) => {
-  return <StyledGrid $gap={gap} $columns={columns} $rows={rows} {...rest} />;
+const Grid = ({ children, columns, rows, gap, ...rest }) => {
+  return <StyledGrid $gap={gap} $columns={columns} $rows={rows} {...rest} > {children} </StyledGrid>
 };
 
 export default Grid;

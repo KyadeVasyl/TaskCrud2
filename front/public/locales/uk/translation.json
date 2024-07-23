@@ -1,0 +1,30 @@
+{
+
+"buttonCreate": "створити товар",
+"buttonDelete": "видалити товар",
+"buttonUpdate": "зберегти зміни",
+
+"Description": "Відображується у картці товару",
+
+
+"ProductCreateTitle": "Створення товару",
+"ProductUpdateTitle": "Оновлення товару",
+"ProductListTitle": "Список товарів",
+
+"En": "Англ",
+  "Uk": "Укр", 
+  
+"ProductInfoTitle": "Інформація про продукт",
+
+"ProductName": "Назва товару",
+"ProductPrice": "Ціна",
+"ProductDescription": "Опис",
+"CreatedSuccess": "Товар успішно створено",
+"BackButton": "Повернутися назад",
+"LinkChange": "Редагувати",
+
+"RequiredField": "Обовязкове поле",
+"NotEnoughText": "Замалий текст",
+"TooMuchText": "Забагато тексту",
+"PositiveNumber": "Введіть коректні дані"
+}
