@@ -60,26 +60,26 @@ router.get('/product-list', (req, res) => {
 
 })
 
-
-router.get('/product-update/:id', (req, res) => {
-
-
+router.get('/product-update/:id', async (req, res) => {
   try {
+    console.log('Received ID:', req.params.id); // Add this line to debug
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
 
-    console.log(`Отримання продукта з айді: ${req.params.id}`);
+    const product = await Product.getById(id);
 
-    const product = Product.getById(Number(req.params.id));
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
     return res.status(200).json(product);
-
   } catch (error) {
-
-    console.error('Помилка при пошуку товару', error);
-    return res.status(404).json({ message: "Товар по такому айді не знайдено" });
+    console.error('Error fetching product', error);
+    return res.status(500).json({ message: "Server error" });
   }
-
-})
-
+});
 
 router.put("/product-update/:id", (req, res) => {
 

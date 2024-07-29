@@ -1,0 +1,10 @@
+{
+  "FIELDS": {
+    "NAME": "Product name",
+    "PRICE": "Price",
+    "DESCRIPTION": "Description",
+    "ID": "Id"
+  },
+
+  "SUBTITLE": "Displayed in the product card"
+}

@@ -1,27 +1,24 @@
 import React from "react";
-import ProductCreate from "./container/product-create";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Alert from "./container/alert";
-import ProductList from "./container/product-list";
-import ProductUpdate from "./container/product-update";
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import HomePage from './container/home';
-import Switcher from "./component/language-switcher";
-
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { Switcher } from "./lib/lang";
+import UseProductCreate from "./epic/product-create";
+import UseAlert from "./epic/alert";
+import UseProductList from "./epic/product-list";
+import UseProductItem from "./epic/product-update";
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-          <Switcher/>
-          <Routes>
-            <Route index element={<HomePage/>} />
-            <Route path="/product-create" element={<ProductCreate />} />
-            <Route path="/alert" element={<Alert />} />
-            <Route path="/product-list" element={<ProductList/>} />
-            <Route path="/product-update/:id" element={<ProductUpdate />} />
-            </Routes>
+        <Switcher />
+        <Routes>
+          <Route path="/product-create" element={<UseProductCreate />} />
+          <Route path="/alert" element={<UseAlert />} />
+          <Route path="/product-list" element={<UseProductList />} />
+          <Route path="/product-update/:id" element={<UseProductItem />} />
+        </Routes>
       </BrowserRouter>
     </QueryClientProvider>
   );

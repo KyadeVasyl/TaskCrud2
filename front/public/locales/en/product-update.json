@@ -1,0 +1,20 @@
+{
+  "TITLE": "Updating product",
+
+  "INFO": "About product",
+
+  "BUTTON": {
+    "UPDATE": "save changes",
+    "DELETE": "delete product"
+  },
+
+  "FIELDS": {
+    "NAME": "Product name",
+    "PRICE": "Price",
+    "DESCRIPTION": "Description",
+    "ID": "Id"
+  },
+
+  "NO_PRODUCT": "There's no product with such id",
+  "ERROR_LOADING": "Error loading products"
+}
