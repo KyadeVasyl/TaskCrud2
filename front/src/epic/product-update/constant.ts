@@ -1,5 +1,7 @@
 import { FormikValues } from "formik";
 
+export const PRODUCT_UPDATE_MODULE_NAME = "PRODUCT_UPDATE_MODULE_NAME";
+
 export enum PRODUCT_DATA_ENUM {
   NAME = "name",
   PRICE = "price",
@@ -44,16 +46,16 @@ export const INITIAL_VALUES = {
 export const API = {
   MAIN: {
     TYPE: "GET",
-    URL: `http://localhost:4000/product-update`,
+    URL: `http://localhost:4000/api/product`,
   },
 
   UPDATE: {
-    TYPE: "PUT",
-    URL: `http://localhost:4000/product-update`,
+    TYPE: "PATCH",
+    URL: `http://localhost:4000/api/product`,
   },
 
   DELETE: {
     TYPE: "DELETE",
-    URL: `http://localhost:4000/product-update`,
+    URL: `http://localhost:4000/api/product`,
   },
 };

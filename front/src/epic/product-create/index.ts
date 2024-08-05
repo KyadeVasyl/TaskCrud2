@@ -1,3 +1,3 @@
-import UseProductCreate from "./hook";
+import ProductCreate from "./container";
 
-export default UseProductCreate;
+export default ProductCreate;

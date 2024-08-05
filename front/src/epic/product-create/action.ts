@@ -2,6 +2,7 @@ import { API, FORM_VALUE_INTER } from "./constant";
 
 import HttpRequest from "../../lib/http";
 import { AxiosResponse } from "axios";
+import i18next from "i18next";
 
 const createProduct = async (
   newProduct: FORM_VALUE_INTER
@@ -16,7 +17,7 @@ const createProduct = async (
   } catch (error) {
     throw new Error(
       (error as any).response?.data?.message ||
-        "Something went wrong with the request"
+        i18next.t("REQUEST_ERROR", { ns: "server" })
     );
   }
 };

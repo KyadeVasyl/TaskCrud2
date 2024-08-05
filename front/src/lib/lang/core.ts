@@ -18,6 +18,7 @@ i18n
       "alert",
       "common",
       "product-list",
+      "server",
       "product-update",
     ],
 

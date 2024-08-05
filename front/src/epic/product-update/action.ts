@@ -3,6 +3,7 @@ import axios from "axios";
 
 import HttpRequest from "../../lib/http";
 import { AxiosResponse } from "axios";
+import i18next from "i18next";
 
 export const getProduct = async (id: string): Promise<PRODUCT_DATA_INTER> => {
   try {
@@ -19,7 +20,7 @@ export const getProduct = async (id: string): Promise<PRODUCT_DATA_INTER> => {
   } catch (error) {
     throw new Error(
       (error as any).response?.data?.message ||
-        "Something went wrong with the request"
+        i18next.t("REQUEST_ERROR", { ns: "server" })
     );
   }
 };
@@ -37,7 +38,7 @@ export const updProduct = async (
   } catch (error) {
     throw new Error(
       (error as any).response?.data?.message ||
-        "Something went wrong with the request"
+        i18next.t("REQUEST_ERROR", { ns: "server" })
     );
   }
 };
@@ -54,7 +55,7 @@ export const deleteProduct = async (
   } catch (error) {
     throw new Error(
       (error as any).response?.data?.message ||
-        "Something went wrong with the request"
+        i18next.t("REQUEST_ERROR", { ns: "server" })
     );
   }
 };

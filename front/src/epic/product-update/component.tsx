@@ -30,18 +30,25 @@ const Component: React.FC<ComponentInter> = ({
 }) => {
   const { t } = useTranslation("product-update");
 
-  if (isSuccess && data) {
-    return (
-      <Form>
-        <Flex $direction="column" $gap="36px">
-          <Title $weight="600" $color="blue" $size={"36px"}>
-            {t("TITLE")}
-          </Title>
-          <Box>
-            <Flex $direction="column" $gap="26px">
-              <Title $weight="normal" $size="24px">
-                {t("INFO")}
-              </Title>
+  return (
+    <Form>
+      <Flex $direction="column" $gap="36px">
+        <Title $weight="600" $color="blue" $size={"36px"}>
+          {t("TITLE")}
+        </Title>
+        <Box>
+          <Flex $direction="column" $gap="26px">
+            <Title $weight="normal" $size="24px">
+              {t("INFO")}
+            </Title>
+            {isLoading && <Loading />}
+            {isError && (
+              <div>
+                {t("ERROR_LOADING")} {error.message}
+              </div>
+            )}
+
+            {isSuccess && data && (
               <Grid>
                 <Grid rows="auto auto" columns="1fr 1fr 1fr" $gap="16px">
                   <Field
@@ -113,25 +120,11 @@ const Component: React.FC<ComponentInter> = ({
                   </Button>
                 </Flex>
               </Grid>
-            </Flex>
-          </Box>
-        </Flex>
-      </Form>
-    );
-  }
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (isError) {
-    return (
-      <div>
-        {t("ERROR_LOADING")} {error.message}
-      </div>
-    );
-  }
-
-  return <div>{t("NO_PRODUCT")}</div>;
+            )}
+          </Flex>
+        </Box>
+      </Flex>
+    </Form>
+  );
 };
 export default Component;

@@ -1,7 +1,9 @@
+export const PRODUCT_LIST_MODULE_NAME = "PRODUCT_LIST_MODULE_NAME";
+
 export const API = {
   MAIN: {
     TYPE: "GET",
-    URL: "http://localhost:4000/product-list",
+    URL: "http://localhost:4000/api/product/list",
   },
 };
 
@@ -21,6 +23,7 @@ export interface PRODUCT_DATA {
 
 export interface ComponentInter {
   data: any;
+  error: any;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;

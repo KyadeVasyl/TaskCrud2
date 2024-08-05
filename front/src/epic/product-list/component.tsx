@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import Loading from "../../common/loading";
 import { ComponentInter } from "./constant";
 const Component: React.FC<ComponentInter> = ({
+  error,
   isSuccess,
   isLoading,
   isError,
@@ -16,21 +17,20 @@ const Component: React.FC<ComponentInter> = ({
 }) => {
   const { t } = useTranslation("product-list");
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (isError) {
-    return <div>{t("ERROR")}</div>;
-  }
-  if (isSuccess && data) {
-    return (
-      <Flex gap={"36px"} direction={"column"}>
-        <Title weight="600" color="blue" size="36px">
-          {t("TITLE")}
-        </Title>
-        <Grid rows={"auto auto"} columns={"1fr 1fr 1fr"} $gap="36px">
-          {data.map((product: any) => (
+  return (
+    <Flex gap={"36px"} direction={"column"}>
+      <Title weight="600" color="blue" size="36px">
+        {t("TITLE")}
+      </Title>
+      <Grid rows={"auto auto"} columns={"1fr 1fr 1fr"} $gap="36px">
+        {isLoading && <Loading />}
+        {isError && <div>{(t("ERROR"), error)}</div>}
+        {isSuccess && (!data || data.length === 0) && (
+          <div>{t("NO_PRODUCTS")}</div>
+        )}
+        {isSuccess &&
+          data &&
+          data.map((product: any) => (
             <Box key={product.id} style={{ padding: "16px" }}>
               <Flex align="none" gap="16px" direction="column">
                 <Title size="24px">{product.name}</Title>
@@ -61,11 +61,8 @@ const Component: React.FC<ComponentInter> = ({
               </Flex>
             </Box>
           ))}
-        </Grid>
-      </Flex>
-    );
-  }
-
-  return <div>{t("NO_PRODUCTS")}</div>;
+      </Grid>
+    </Flex>
+  );
 };
 export default Component;

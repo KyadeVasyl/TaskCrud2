@@ -1,3 +1,3 @@
-import UseProductItem from "./hook";
+import ProductItem from "./container";
 
-export default UseProductItem;
+export default ProductItem;

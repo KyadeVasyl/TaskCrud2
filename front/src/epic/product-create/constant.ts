@@ -1,3 +1,5 @@
+export const PRODUCT_CREATE_MODULE_NAME = "PRODUCT_CREATE_MODULE_NAME";
+
 export enum FORM_VALUE_ENUM {
   NAME = "name",
   PRICE = "price",
@@ -23,6 +25,6 @@ export const INITIAL_VALUES = {
 export const API = {
   MAIN: {
     TYPE: "POST",
-    URL: "http://localhost:4000/product-create",
+    URL: "http://localhost:4000/api/product/create",
   },
 };
