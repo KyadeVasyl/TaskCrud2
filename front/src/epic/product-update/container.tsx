@@ -42,6 +42,7 @@ const ProductItem: React.FC = () => {
         price: data[PRODUCT_DATA_ENUM.PRICE],
         description: data[PRODUCT_DATA_ENUM.DESCRIPTION],
         id: data[PRODUCT_DATA_ENUM.ID],
+        numericId: data[PRODUCT_DATA_ENUM.NUMERIC_ID],
       });
       setProduct(data);
       console.log(product);
@@ -76,6 +77,7 @@ const ProductItem: React.FC = () => {
         name: data[PRODUCT_DATA_ENUM.NAME],
         price: data[PRODUCT_DATA_ENUM.PRICE],
         description: data[PRODUCT_DATA_ENUM.DESCRIPTION],
+        numericId: data[PRODUCT_DATA_ENUM.NUMERIC_ID],
         id: data[PRODUCT_DATA_ENUM.ID],
       }));
       setProduct(data);

@@ -11,7 +11,7 @@ export enum PRODUCT_DATA_ENUM {
   NAME = "name",
   PRICE = "price",
   DESCRIPTION = "description",
-  ID = "ID",
+  ID = "id",
 }
 
 export interface PRODUCT_DATA {
@@ -27,5 +27,5 @@ export interface ComponentInter {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  handleEdit: (id: number) => void;
+  handleEdit: (id: string) => void;
 }

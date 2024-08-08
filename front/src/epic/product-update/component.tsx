@@ -73,11 +73,11 @@ const Component: React.FC<ComponentInter> = ({
                   />
 
                   <Field
-                    name={PRODUCT_DATA_ENUM.ID}
+                    name={PRODUCT_DATA_ENUM.NUMERIC_ID}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     title={PRODUCT_DATA_ENUM.ID.toString()}
-                    value={getFieldValue(PRODUCT_DATA_ENUM.ID)}
+                    value={getFieldValue(PRODUCT_DATA_ENUM.NUMERIC_ID)}
                     error={isFieldError(PRODUCT_DATA_ENUM.ID)}
                     errorMessage={getFieldError(PRODUCT_DATA_ENUM.ID)}
                     readOnly

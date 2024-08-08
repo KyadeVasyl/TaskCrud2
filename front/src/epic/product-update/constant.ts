@@ -7,6 +7,7 @@ export enum PRODUCT_DATA_ENUM {
   PRICE = "price",
   DESCRIPTION = "description",
   ID = "id",
+  NUMERIC_ID = "numericId",
 }
 
 export interface ComponentInter {
@@ -28,7 +29,8 @@ export interface PRODUCT_DATA_INTER {
   [PRODUCT_DATA_ENUM.NAME]: string;
   [PRODUCT_DATA_ENUM.PRICE]: number;
   [PRODUCT_DATA_ENUM.DESCRIPTION]: string;
-  [PRODUCT_DATA_ENUM.ID]: number;
+  [PRODUCT_DATA_ENUM.ID]: string;
+  [PRODUCT_DATA_ENUM.NUMERIC_ID]: number;
 }
 
 export type PRODUCT_VALUE_TYPE =
@@ -40,7 +42,9 @@ export const INITIAL_VALUES = {
   [PRODUCT_DATA_ENUM.NAME]: "",
   [PRODUCT_DATA_ENUM.PRICE]: 0,
   [PRODUCT_DATA_ENUM.DESCRIPTION]: "",
-  [PRODUCT_DATA_ENUM.ID]: 0,
+  [PRODUCT_DATA_ENUM.ID]: "",
+
+  [PRODUCT_DATA_ENUM.NUMERIC_ID]: 0,
 };
 
 export const API = {

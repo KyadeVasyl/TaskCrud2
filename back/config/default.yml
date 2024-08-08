@@ -1,0 +1,11 @@
+SERVER:
+  PORT: 4000
+
+DATABASE:
+  TYPE: "postgres"
+  PORT: 5432
+  USERNAME: "postgres"
+  HOST: "localhost"
+  PASSWORD: "admin"
+  NAME: "products"
+  SYNCHRONIZE: true

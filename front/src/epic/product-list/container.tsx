@@ -11,7 +11,7 @@ const ProductList: React.FC = () => {
     queryFn: getData,
   });
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     navigate(`/product/${id}`);
   };
 

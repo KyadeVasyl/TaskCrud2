@@ -14,6 +14,7 @@ export const getProduct = async (id: string): Promise<PRODUCT_DATA_INTER> => {
       price: response.data.price,
       description: response.data.description,
       id: response.data.id,
+      numericId: response.data.numericId,
     };
 
     return productData;

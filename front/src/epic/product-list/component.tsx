@@ -36,7 +36,7 @@ const Component: React.FC<ComponentInter> = ({
                 <Title size="24px">{product.name}</Title>
                 <Description size="16px">{product.description}</Description>
                 <span style={{ color: "grey", fontSize: "14px" }}>
-                  ID: {product.id}
+                  ID: {product.numericId}
                 </span>
                 <Flex gap={"12px"} align="center" justify="space-between">
                   <span
