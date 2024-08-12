@@ -72,13 +72,14 @@ const ProductItem: React.FC = () => {
 
   useEffect(() => {
     if (data) {
+      console.log("Fetched product data:", data);
       setInitialValues((prevState) => ({
         ...prevState,
         name: data[PRODUCT_DATA_ENUM.NAME],
         price: data[PRODUCT_DATA_ENUM.PRICE],
         description: data[PRODUCT_DATA_ENUM.DESCRIPTION],
-        numericId: data[PRODUCT_DATA_ENUM.NUMERIC_ID],
         id: data[PRODUCT_DATA_ENUM.ID],
+        numericId: data[PRODUCT_DATA_ENUM.NUMERIC_ID],
       }));
       setProduct(data);
     }
@@ -128,6 +129,7 @@ const ProductItem: React.FC = () => {
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values: PRODUCT_DATA_INTER) => {
+      console.log("Form values on submit:", values);
       updateProduct(values);
     },
   });

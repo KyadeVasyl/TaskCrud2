@@ -4,56 +4,50 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
-  ParseIntPipe,
   UseGuards,
 } from "@nestjs/common";
 import { PhotoService } from "./photo.service";
 import { CreatePhotoDto } from "./dto/create-photo.dto";
 import { UpdatePhotoDto } from "./dto/update-photo.dto";
 import { PhotoEntity } from "./photo.entity";
-import { ValidNumIdGuard } from "./guard/valid-id.guard";
-import { ValidUUIdGuard } from "../product/guard/valid-id.guard";
+import { PhotoGuard } from "./guard/photo.guard";
+import { GetPhoto } from "./decorator/get-photo.decorator";
+import { GetPhotoListDto } from "./dto/get-photo-list.dto";
+import { GetPhotoDataDto } from "./dto/get-photo-data.dto";
 
 @Controller("photo")
 export class PhotoController {
   constructor(private readonly photoService: PhotoService) {}
 
   @Post("create")
-  create(@Body() createPhotoDto: CreatePhotoDto) {
+  create(@Body() createPhotoDto: CreatePhotoDto): Promise<PhotoEntity> {
     return this.photoService.create(createPhotoDto);
   }
 
   @Get("list")
-  findAll() {
-    return this.photoService.findAll();
+  findAll(): Promise<GetPhotoListDto> {
+    return this.photoService.getList();
   }
 
-  @UseGuards(ValidNumIdGuard)
+  @UseGuards(PhotoGuard)
   @Get(":photoId")
-  findOne(@Param("photoId") id: string) {
-    return this.photoService.findOnePhoto(+id);
+  findOne(@GetPhoto() photo: PhotoEntity): Promise<GetPhotoDataDto> {
+    return this.photoService.getOne(photo);
   }
 
-  @UseGuards(ValidNumIdGuard)
+  @UseGuards(PhotoGuard)
   @Patch(":photoId")
-  update(@Param("photoId") id: string, @Body() updatePhotoDto: UpdatePhotoDto) {
-    return this.photoService.update(+id, updatePhotoDto);
-  }
-
-  @UseGuards(ValidNumIdGuard, ValidUUIdGuard)
-  @Post(":photoId/product/:productId")
-  async addPhotoToProduct(
-    @Param("photoId", ParseIntPipe) photoId: number,
-    @Param("productId") productId: string
+  update(
+    @GetPhoto() photo: PhotoEntity,
+    @Body() updatePhotoDto: UpdatePhotoDto
   ): Promise<PhotoEntity> {
-    return await this.photoService.addPhotoToProduct(productId, photoId);
+    return this.photoService.update(photo, updatePhotoDto);
   }
 
-  @UseGuards(ValidNumIdGuard)
+  @UseGuards(PhotoGuard)
   @Delete(":photoId")
-  remove(@Param("photoId") id: string) {
-    return this.photoService.delete(+id);
+  remove(@GetPhoto() photo: PhotoEntity): Promise<void> {
+    return this.photoService.delete(photo);
   }
 }

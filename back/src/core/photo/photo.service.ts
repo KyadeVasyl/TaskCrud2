@@ -3,93 +3,48 @@ import { CreatePhotoDto } from "./dto/create-photo.dto";
 import { UpdatePhotoDto } from "./dto/update-photo.dto";
 import { PhotoEntity } from "./photo.entity";
 import { PhotoRepository } from "./photo.repository";
-import { ProductRepository } from "src/core/product/product.repository";
-import {
-  findEntityById,
-  handleDatabaseOperation,
-} from "src/util/service-helpers";
+import { GetPhotoListDto } from "./dto/get-photo-list.dto";
+import { GetPhotoDataDto } from "./dto/get-photo-data.dto";
 
 @Injectable()
 export class PhotoService {
-  constructor(
-    private readonly photoRepository: PhotoRepository,
-    private readonly productRepository: ProductRepository
-  ) {}
+  constructor(private readonly photoRepository: PhotoRepository) {}
 
   async create(createPhotoDto: CreatePhotoDto): Promise<PhotoEntity> {
-    const photo = Object.assign(new PhotoEntity(), createPhotoDto);
-
-    if (createPhotoDto.product) {
-      photo.product = await findEntityById(
-        this.productRepository,
-        createPhotoDto.product.id,
-        "Product"
-      );
-    }
-
-    return handleDatabaseOperation(
-      () => this.photoRepository.savePhoto(photo),
-      "Error creating photo"
-    );
+    return await this.photoRepository.createPhoto(createPhotoDto);
   }
 
-  async findAll(): Promise<PhotoEntity[]> {
-    return handleDatabaseOperation(
-      () => this.photoRepository.findAllPhotos(),
-      "Error finding all photos"
-    );
+  async getList(): Promise<GetPhotoListDto> {
+    return {
+      list: await this.photoRepository
+        .createQueryBuilder("photo")
+        .select(["photo.id", "photo.name", "photo.url", "photo.description"])
+        .orderBy("photo.createdAt", "DESC")
+        .getMany(),
+    };
   }
 
-  async findOnePhoto(id: number): Promise<PhotoEntity> {
-    return findEntityById(this.photoRepository, id, "Photo");
+  async getOne(photo: PhotoEntity): Promise<GetPhotoDataDto> {
+    return {
+      name: photo.name,
+      description: photo.description,
+      url: photo.url,
+      product: photo.product,
+    };
   }
 
   async update(
-    id: number,
+    photo: PhotoEntity,
     updatePhotoDto: UpdatePhotoDto
   ): Promise<PhotoEntity> {
-    const photo = await this.findOnePhoto(id);
-    Object.assign(photo, updatePhotoDto);
-
-    return handleDatabaseOperation(
-      () => this.photoRepository.savePhoto(photo),
-      "Error updating photo"
-    );
+    return await this.photoRepository.updatePhoto(photo, updatePhotoDto);
   }
 
-  async delete(id: number): Promise<{ deleted: boolean }> {
-    await this.findOnePhoto(id);
-
-    return handleDatabaseOperation(async () => {
-      await this.photoRepository.deletePhoto(id);
-      return { deleted: true };
-    }, "Error deleting photo");
+  async delete(photo: PhotoEntity): Promise<void> {
+    await this.photoRepository.deletePhoto(photo.id);
   }
 
-  async addPhotoToProduct(
-    productId: string,
-    photoId: number
-  ): Promise<PhotoEntity> {
-    const photo = await this.findOnePhoto(photoId);
-    photo.product = await findEntityById(
-      this.productRepository,
-      productId,
-      "Product"
-    );
-
-    return handleDatabaseOperation(
-      () => this.photoRepository.savePhoto(photo),
-      "Error adding photo to product"
-    );
-  }
-
-  async deletePhotosByProductId(productId: string): Promise<void> {
-    const photos = await this.photoRepository.find({
-      where: { product: { id: productId } },
-    });
-
-    for (const photo of photos) {
-      await this.photoRepository.delete(photo.id);
-    }
+  async deletePhotosByProduct(productId: string): Promise<void> {
+    await this.photoRepository.delete({ product: { id: productId } });
   }
 }

@@ -1,4 +1,4 @@
-import { API, PRODUCT_DATA_INTER } from "./constant";
+import { API, PRODUCT_DATA_ENUM, PRODUCT_DATA_INTER } from "./constant";
 import axios from "axios";
 
 import HttpRequest from "../../lib/http";

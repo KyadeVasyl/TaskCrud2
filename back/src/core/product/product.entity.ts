@@ -18,7 +18,7 @@ export class ProductEntity {
     generated: "increment",
     unique: true,
   })
-  numericId: number;
+  numericId: number; // ДЛЯ ФРОНТУ ІНПУТ АЙДІ
 
   @Column({
     type: "varchar",
@@ -39,7 +39,7 @@ export class ProductEntity {
     cascade: true,
     onDelete: "CASCADE",
   })
-  photos: PhotoEntity[];
+  photos?: PhotoEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

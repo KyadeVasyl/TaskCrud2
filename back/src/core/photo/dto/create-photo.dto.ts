@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -19,11 +18,9 @@ export class CreatePhotoDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsUrl()
+  @IsUrl({}, { message: "Invalid URL" })
   url: string;
 
-  @IsBoolean()
-  isPublished: boolean;
   @IsOptional()
   @IsObject()
   product?: ProductEntity;

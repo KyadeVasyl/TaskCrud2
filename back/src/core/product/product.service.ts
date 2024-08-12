@@ -3,11 +3,9 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { ProductRepository } from "./product.repository";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { ProductEntity } from "./product.entity";
-import { PhotoService } from "src/core/photo/photo.service";
-import {
-  findEntityById,
-  handleDatabaseOperation,
-} from "src/util/service-helpers";
+import { GetProductDataDto } from "./dto/get-product.dto";
+import { GetProductListDto } from "./dto/get-product-list.dto";
+import { PhotoService } from "../photo/photo.service";
 
 @Injectable()
 export class ProductService {
@@ -19,51 +17,45 @@ export class ProductService {
   async createProduct(
     createProductDto: CreateProductDto
   ): Promise<ProductEntity> {
-    return handleDatabaseOperation(async () => {
-      const product =
-        await this.productRepository.createProduct(createProductDto);
-
-      if (createProductDto.photos) {
-        for (const photo of createProductDto.photos) {
-          await this.photoService.create({ ...photo, product });
-        }
-      }
-
-      return product;
-    }, "Error creating product");
+    return await this.productRepository.createProduct(createProductDto);
   }
 
-  async findAllProducts(): Promise<ProductEntity[]> {
-    return handleDatabaseOperation(
-      () => this.productRepository.findAllProducts(),
-      "Error finding all products"
-    );
+  async getProductList(): Promise<GetProductListDto> {
+    return {
+      list: await this.productRepository
+        .createQueryBuilder("product")
+        .leftJoinAndSelect("product.photos", "photo")
+        .orderBy("product.createdAt", "DESC")
+        .getMany(),
+    };
   }
 
-  async findOneProduct(id: string): Promise<ProductEntity> {
-    return findEntityById(this.productRepository, id, "Product");
+  async getProduct(product: ProductEntity): Promise<GetProductDataDto> {
+    return {
+      id: product.id,
+      numericId: product.numericId,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      photos: product.photos,
+    };
   }
 
   async updateProduct(
-    id: string,
+    product: ProductEntity,
     updateProductDto: UpdateProductDto
   ): Promise<ProductEntity> {
-    const product = await this.findOneProduct(id);
-    Object.assign(product, updateProductDto);
-
-    return handleDatabaseOperation(
-      () => this.productRepository.updateProduct(id, updateProductDto),
-      "Error updating product"
+    return await this.productRepository.updateProduct(
+      product,
+      updateProductDto
     );
   }
 
-  async deleteProduct(id: string): Promise<{ deleted: boolean }> {
-    await this.findOneProduct(id);
+  async deleteProduct(product: ProductEntity): Promise<void> {
+    if (product.photos && product.photos.length > 0) {
+      await this.photoService.deletePhotosByProduct(product.id);
+    }
 
-    return handleDatabaseOperation(async () => {
-      await this.photoService.deletePhotosByProductId(id);
-      await this.productRepository.deleteProduct(id);
-      return { deleted: true };
-    }, "Error deleting product");
+    await this.productRepository.deleteProduct(product.id);
   }
 }

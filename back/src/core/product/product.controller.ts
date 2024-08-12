@@ -4,47 +4,50 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   UseGuards,
 } from "@nestjs/common";
 import { ProductService } from "./product.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-import { ValidUUIdGuard } from "./guard/valid-id.guard";
+import { ProductGuard } from "./guard/product.guard";
+import { GetProduct } from "./decorator/get-product.decorator";
+import { ProductEntity } from "./product.entity";
+import { GetProductDataDto } from "./dto/get-product.dto";
+import { GetProductListDto } from "./dto/get-product-list.dto";
 
 @Controller("product")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post("create")
-  create(@Body() createProductDto: CreateProductDto) {
+  create(@Body() createProductDto: CreateProductDto): Promise<ProductEntity> {
     return this.productService.createProduct(createProductDto);
   }
 
   @Get("list")
-  findAll() {
-    return this.productService.findAllProducts();
+  findAll(): Promise<GetProductListDto> {
+    return this.productService.getProductList();
   }
 
-  @UseGuards(ValidUUIdGuard)
+  @UseGuards(ProductGuard)
   @Get(":productId")
-  findOne(@Param("productId") id: string) {
-    return this.productService.findOneProduct(id);
+  findOne(@GetProduct() product: ProductEntity): Promise<GetProductDataDto> {
+    return this.productService.getProduct(product);
   }
 
-  @UseGuards(ValidUUIdGuard)
+  @UseGuards(ProductGuard)
   @Patch(":productId")
   update(
-    @Param("productId") id: string,
+    @GetProduct() product: ProductEntity,
     @Body() updateProductDto: UpdateProductDto
-  ) {
-    return this.productService.updateProduct(id, updateProductDto);
+  ): Promise<ProductEntity> {
+    return this.productService.updateProduct(product, updateProductDto);
   }
 
-  @UseGuards(ValidUUIdGuard)
+  @UseGuards(ProductGuard)
   @Delete(":productId")
-  remove(@Param("productId") id: string) {
-    return this.productService.deleteProduct(id);
+  remove(@GetProduct() product: ProductEntity): Promise<void> {
+    return this.productService.deleteProduct(product);
   }
 }

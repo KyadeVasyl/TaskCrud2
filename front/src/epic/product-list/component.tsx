@@ -30,7 +30,7 @@ const Component: React.FC<ComponentInter> = ({
         )}
         {isSuccess &&
           data &&
-          data.map((product: any) => (
+          data.list.map((product: any) => (
             <Box key={product.id} style={{ padding: "16px" }}>
               <Flex align="none" gap="16px" direction="column">
                 <Title size="24px">{product.name}</Title>

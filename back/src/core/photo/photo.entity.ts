@@ -1,4 +1,3 @@
-import { IsUrl } from "class-validator";
 import { ProductEntity } from "src/core/product/product.entity";
 import {
   Column,
@@ -27,17 +26,10 @@ export class PhotoEntity {
   description: string;
 
   @Column()
-  @IsUrl({}, { message: "Invalid URL" })
   url: string;
 
-  @Column({
-    type: "boolean",
-    default: false,
-  })
-  isPublished: boolean;
-
   @ManyToOne(() => ProductEntity, (product) => product.photos)
-  @JoinColumn({ name: "product_id" })
+  @JoinColumn()
   product?: ProductEntity;
 
   @CreateDateColumn()
